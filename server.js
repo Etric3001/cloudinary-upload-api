@@ -1,7 +1,7 @@
 require('dotenv').config();
 const express = require('express');
 const multer = require('multer');
-const fileType = require('file-type');
+const { fileTypeFromBuffer } = require('file-type');
 const cors = require('cors');
 const cloudinary = require('cloudinary').v2;
 const clamav = require('clamav.js');
@@ -36,7 +36,7 @@ app.post('/upload', upload.single('file'), async (req, res) => {
     const buffer = req.file.buffer;
 
     // Vérification type MIME
-    const type = await fileType.fromBuffer(buffer);
+    const type = await fileTypeFromBuffer(buffer);
     if (!type || !['image/jpeg', 'image/png', 'image/webp'].includes(type.mime)) {
       return res.status(400).json({ error: 'Fichier non autorisé' });
     }
